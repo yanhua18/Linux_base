@@ -2,13 +2,13 @@
 
 int main()
 {
-    //使用httplib.h的时候，需要使用httplib提供的命名空间
     using namespace httplib;
     Server svr;
-    svr.Get("/aaa",[](const Request& req,Response& resp)
+    //1,获取试题的信息（从文件中获取）
+    svr.Get("/all_questions",[](const Request& req , Response& resp)
             {
-            printf("i get menthens\n");
+            resp.set_content("<html>xxxx</html>","text/html");
             });
-    svr.listen("0.0.0.0",19999);
+    svr.listen("0.0.0.0",18888);
     return 0;
 }
