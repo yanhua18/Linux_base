@@ -48,7 +48,7 @@ class oj_Model
             {
                 //需要切割字符串，并将其保存到unordered_map中
                 std::vector<std::string> vec;
-                StringTools::Split(line,"\t",&vec);
+                StringTools::Split(line," ",&vec);
                 if(vec.size()!=4)
                 {
                     continue;
