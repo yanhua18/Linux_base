@@ -53,6 +53,15 @@ int main()
             resp.set_content(html,"text/html;charset=UTF-8");
             });
 
+    svr.Post(R"(/question/(\d+))",[&ojmode](const Request& req , Response& resp){
+            //key:value
+            //1,从正文中提取出来用户提交的code字段，提交的内容当中有URL
+            //2,编译运行
+            //3,构造响应，
+            std::string html="1";
+            resp.set_content(html,"text/html;charset=UTF-8");
+            });
+
     LOG(INFO,"listen for 0.0.0.0:19999");std::cout<<std::endl;
     LOG(INFO,"Server ready");std::cout<<std::endl;
     //listen函数会阻塞
