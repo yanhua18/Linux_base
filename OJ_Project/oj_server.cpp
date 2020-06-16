@@ -5,6 +5,7 @@
 #include<string>
 #include"Oj_view.hpp"
 #include"oj_log.hpp"
+#include"compile.hpp"
 int main()
 {
     using namespace httplib;
@@ -56,7 +57,24 @@ int main()
     svr.Post(R"(/question/(\d+))",[&ojmode](const Request& req , Response& resp){
             //key:value
             //1,从正文中提取出来用户提交的code字段，提交的内容当中有URL
+            std::unordered_map<std::string,std::string> pram;
+            UrlUtil::PraseBody(req.body,&pram);
+ //           for(const auto& pr:pram)
+ //           {
+ //           LOG(INFO,"code");
+ //           std::cout<<pr.second;
+ //           std::cout<<std::endl;
+ //           }
             //2,编译运行
+            // 2.1需要给提交的代码增加头文件，测试用例，main函数
+            std::string code;
+            ojmode.SplicingCode(pram["code"],req.matches[1].str(),&code);
+            //LOG(INFO,"code");
+            //std::cout<<code<<std::endl;
+            Json::Value req_json;
+            req_json["code"]=code;
+            Json::Value Resp_json;
+            Compiler::CompileAndRun(req_json,Resp_json);
             //3,构造响应，
             std::string html="1";
             resp.set_content(html,"text/html;charset=UTF-8");

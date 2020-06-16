@@ -1,16 +1,15 @@
-/**
- *  * Definition for singly-linked list.
- *   * struct ListNode {
- *    *     int val;
- *     *     ListNode *next;
- *      *     ListNode(int x) : val(x), next(NULL) {}
- *       * };
- *        */
-class Solution {
-    public:
-        ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
+using namespace std;
 
-                
-        }
+class Solution {
+      public:
+          bool isPalindrome(int x) {
+                        
+                  
+          }
 
 };

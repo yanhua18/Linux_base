@@ -1,5 +1,6 @@
 #pragma once
 #include<iostream>
+using namespace std;
 #include<unistd.h>
 #include<unordered_map>
 #include<string>
@@ -61,6 +62,26 @@ class oj_Model
             }
            return true; 
         }
+        bool SplicingCode(std::string user_code,const std::string ques_id,std::string* code)
+        {
+            //1,查找对应ID的题目是否存在
+           auto iter=model_map_.find(ques_id);
+           if(iter == model_map_.end())
+           {
+               LOG(ERROR,"没有找到该题目，此题目的id是");
+               std::cout<<ques_id<<std::endl;
+               return false;
+           }
+           std::string tail_code;
+           int ret =  FileOperater::ReadDataFromFile(TailPath(iter->second.path_),&tail_code); 
+           if(ret<0)
+           {
+               LOG(ERROR,"打开tail.cpp文件失败");
+               return false;
+           }
+           *code=user_code+tail_code;
+           return true;
+        }
     private:
         std::string DescPath(const std::string& ques_path)
         {
@@ -69,6 +90,10 @@ class oj_Model
         std::string HeaderPath(const std::string& ques_path)
         {
             return ques_path + "header.cpp";
+        }
+        std::string TailPath(const std::string& ques_path)
+        {
+            return ques_path + "tail.cpp";
         }
     private:
         bool LoadQuestions(const std::string& configfile_path)
