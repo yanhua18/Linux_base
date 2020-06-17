@@ -35,6 +35,18 @@ class FileOperater
             file.close();
             return 0;
         }
+        static int WriteDataToFile(const std::string& filename,const std::string& Data)
+        {
+            std::ofstream file(filename.c_str());
+            if(!file.is_open())
+            {
+                LOG(ERROR,"打开文件失败！")<<filename<<std::endl;
+                return -1;
+            }
+            file.write(Data.data(),Data.size());
+            file.close();
+            return 0;
+        }
 };
 
 class UrlUtil
