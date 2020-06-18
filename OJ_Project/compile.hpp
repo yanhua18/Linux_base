@@ -1,10 +1,15 @@
 #pragma once 
 #include<iostream>
 #include<unistd.h>
+#include<fcntl.h>
+#include<sys/stat.h>
+#include<sys/resource.h>
 #include<sys/wait.h>
 #include<string>
 #include<json/json.h>
 #include"oj_log.hpp"
+#include"tools.hpp"
+
 class Compiler
 {
     public:
@@ -30,9 +35,11 @@ class Compiler
                 return;
             }
             //3,编译
-            if(!Compile())
+            if(!Compile(tmp_filename))
             {
-
+                LOG(ERROR,"compile error");
+                std::cout<<std::endl;
+                return;
             }
             //4，运行
             if(!Run())
@@ -46,9 +53,9 @@ class Compiler
         static std::string WriteTmpFile(const std::string& code)
         {
             //1,组织文件的名称，组织文件的前缀名称，用来区分源码文件，可执行文件是.一组数据
-            std::string tmp_filename="tmp_"+std::to_string(LogTime::GetTimeStamp());
+            std::string tmp_filename="/tmp_"+std::to_string(LogTime::GetTimeStamp());
             //2,写文件
-            int ret= FileOper::WriteDataToFile(SrcPath(tmp_filename),code);
+            int ret= FileOperater::WriteDataToFile(SrcPath(tmp_filename),code);
             if(ret<0)
             {
                 LOG(ERROR,"write code to source fail");
@@ -87,6 +94,9 @@ class Compiler
             snprintf(Command[2],49,"%s","-o");
             snprintf(Command[3],49,"%s",ExePath(filename).c_str());
             snprintf(Command[4],49,"%s","-std=c++11");
+            snprintf(Command[5],49,"%s","-D");
+            snprintf(Command[6],49,"%s","CompileOnline");
+            Command[7]=NULL;
             //2,创建子进程
             //2.1父进程-->等待子进程退出
             //2.2子进程-->进程程序替换--->g++
@@ -104,6 +114,9 @@ class Compiler
                 dup2(fd,2);
                 //程序替换
                 execvp(Command[0],Command);
+                perror("execvp");
+                LOG(ERROR,"execvp failed");
+                std::cout<<std::endl;
                 exit(0);
             }
             else

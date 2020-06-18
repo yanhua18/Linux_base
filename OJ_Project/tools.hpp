@@ -40,7 +40,8 @@ class FileOperater
             std::ofstream file(filename.c_str());
             if(!file.is_open())
             {
-                LOG(ERROR,"打开文件失败！")<<filename<<std::endl;
+                LOG(ERROR,"打开文件失败！");
+                std::cout<<filename<<std::endl;
                 return -1;
             }
             file.write(Data.data(),Data.size());
