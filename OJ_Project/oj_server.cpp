@@ -74,9 +74,13 @@ int main()
             Json::Value req_json;
             req_json["code"]=code;
             Json::Value Resp_json;
-            Compiler::CompileAndRun(req_json,Resp_json);
+            Compiler::CompileAndRun(req_json,&Resp_json);
             //3,构造响应，
-            std::string html="1";
+            const std::string errorno=Resp_json["errorno"].asString();
+            const std::string reason=Resp_json["reason"].asString();
+            const std::string stdout_reason=Resp_json["stdout"].asString();
+            std::string html;
+            oj_view::ExpandReason(errorno,reason,stdout_reason,&html);
             resp.set_content(html,"text/html;charset=UTF-8");
             });
 
